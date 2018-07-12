@@ -16,7 +16,7 @@ import static org.junit.runners.Parameterized.*;
 public class MoveTest {
 
     private Move basicMove;
-    private Move otherMove;
+    private Move moveToCompare;
     private int comparisonResult;
 
     @Parameters(name = "{index}: compare {0} to {1}")
@@ -34,14 +34,14 @@ public class MoveTest {
         });
     }
 
-    public MoveTest(Move basicMove, Move otherMove, int comparisonResult) {
+    public MoveTest(Move basicMove, Move moveToCompare, int comparisonResult) {
         this.basicMove = basicMove;
-        this.otherMove = otherMove;
+        this.moveToCompare = moveToCompare;
         this.comparisonResult = comparisonResult;
     }
 
     @Test
     public void compareMoves() {
-        assertThat("Incorrect result of comparison", basicMove.compareMoves(otherMove), is(comparisonResult));
+        assertThat("Incorrect result of comparison", basicMove.compareMoves(moveToCompare), is(comparisonResult));
     }
 }

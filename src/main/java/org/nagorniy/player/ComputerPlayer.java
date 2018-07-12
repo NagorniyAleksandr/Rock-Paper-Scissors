@@ -14,6 +14,11 @@ public class ComputerPlayer implements Player {
         this.random = random;
     }
 
+    /**
+     * Method to make new move
+     *
+     * @return random move
+     */
     public Move makeMove() {
         return MOVE_VALUES[random.nextInt(MOVE_VALUES.length)];
     }

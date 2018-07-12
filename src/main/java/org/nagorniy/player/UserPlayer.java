@@ -15,6 +15,10 @@ public class UserPlayer implements Player {
             "Make your choice: Rock(R), Paper(P), or Scissors(S): ";
 
     private final Scanner scanner;
+
+    /**
+     * This map is used to validate user's input and convert it to the {@code Move}
+     */
     private final Map<String, Move> moveMappingMap = Collections.unmodifiableMap(
             new HashMap<String, Move>() {{
                 put("R", Move.ROCK);
@@ -26,6 +30,14 @@ public class UserPlayer implements Player {
         this.scanner = scanner;
     }
 
+    /**
+     * Method to ask user for the new move.
+     * The first letter of user's input will be converted to {@code Move} by {@code moveMappingMap}.
+     * This method is not case-sensitive.
+     * In case of incorrect input - {@code INVALID_INPUT_MESSAGE} will be printed and retry invoked
+     *
+     * @return user's move
+     */
     public Move makeMove() {
 
         System.out.println(ASK_USER_FOR_CHOICE_MESSAGE);

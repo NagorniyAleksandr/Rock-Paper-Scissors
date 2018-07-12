@@ -28,6 +28,10 @@ public class RockPaperScissorsGame implements Game {
 
     private static final String CHOSEN_SHAPE_MESSAGE_FORMAT = "Computer chose %s.\nYou chose %s\n";
 
+    /**
+     * This variable defines the game termination symbol.
+     * Change it if you want to set other exit symbol.
+     */
     private static final String TERMINATE_GAME_SYMBOL = "Q";
     private static final String PLAY_AGAIN_MESSAGE_FORMAT = "Input any symbol to continue game, or '%s' to exit:\n";
 
@@ -46,15 +50,15 @@ public class RockPaperScissorsGame implements Game {
         computerPlayer = new ComputerPlayer(random);
     }
 
-    private static void printGoodbye() {
-        out.println(GOODBYE_MESSAGE);
-    }
-
-    private static void printInvitation() {
-        out.println(INVITATION_MESSAGE);
-        out.println(GAME_RULES_MESSAGE);
-    }
-
+    /**
+     * Method to invoke and high-level control the game process.
+     * This method invokes:
+     * - invitation printing,
+     * - moves making,
+     * - game termination,
+     * - printing statistic at the end of the execution
+     * - goodbye message printing
+     */
     public void playGame() {
         printInvitation();
 
@@ -71,6 +75,14 @@ public class RockPaperScissorsGame implements Game {
         printGoodbye();
     }
 
+    /**
+     * Method to determine the winner of the game.
+     * This method compares two moves, prints appropriated console message
+     * and increments {@code userScore} or {@code computerScore} counters
+     *
+     * @param userMove     move of the user
+     * @param computerMove move of the computer
+     */
     private void determineWinner(Move userMove, Move computerMove) {
         int compareMoves = userMove.compareMoves(computerMove);
 
@@ -85,8 +97,28 @@ public class RockPaperScissorsGame implements Game {
         }
     }
 
+    /**
+     * Method to determine the continuation of the game.
+     *
+     * @return {@code true} if user chose to continue the game and {@code false} in case of execution termination
+     */
     private boolean playAgain() {
         out.printf(PLAY_AGAIN_MESSAGE_FORMAT, TERMINATE_GAME_SYMBOL);
         return !scanner.next().toUpperCase().equals(TERMINATE_GAME_SYMBOL);
+    }
+
+    /**
+     * This method prints {@code GOODBYE_MESSAGE}
+     */
+    private static void printGoodbye() {
+        out.println(GOODBYE_MESSAGE);
+    }
+
+    /**
+     * This method prints {@code INVITATION_MESSAGE} and {@code GAME_RULES_MESSAGE}
+     */
+    private static void printInvitation() {
+        out.println(INVITATION_MESSAGE);
+        out.println(GAME_RULES_MESSAGE);
     }
 }

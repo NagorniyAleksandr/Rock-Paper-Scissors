@@ -73,7 +73,7 @@ public class RockPaperScissorsGameIntegrationTest {
     }
 
     @Test
-    public void computerPlaysOnlyRockTest() throws Exception {
+    public void playGameTest() throws Exception {
 
         RockPaperScissorsGame rockPaperScissorsGame = new RockPaperScissorsGame(scanner, mockRandom);
         rockPaperScissorsGame.playGame();
