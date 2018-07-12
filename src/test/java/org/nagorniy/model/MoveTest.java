@@ -15,8 +15,6 @@ import static org.junit.runners.Parameterized.*;
 @RunWith(Parameterized.class)
 public class MoveTest {
 
-
-
     private Move basicMove;
     private Move otherMove;
     private int comparisonResult;

@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class UserPlayer implements Player {
 
-
     private static final String INVALID_INPUT_MESSAGE = "Invalid input, try again...";
     private static final String ASK_USER_FOR_CHOICE_MESSAGE =
             "Make your choice: Rock(R), Paper(P), or Scissors(S): ";

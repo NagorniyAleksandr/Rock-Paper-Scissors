@@ -35,7 +35,6 @@ public class RockPaperScissorsGameIntegrationTest {
 
     private List<String> userMoves = Arrays.asList("R", "R", "R", "P", "P", "S");
 
-
     public RockPaperScissorsGameIntegrationTest(Move computerMove, int wins, int losses, int draws) {
         this.computerMove = computerMove;
         this.wins = wins;
