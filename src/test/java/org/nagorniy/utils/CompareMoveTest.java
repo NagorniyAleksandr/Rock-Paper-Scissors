@@ -1,8 +1,9 @@
-package org.nagorniy.model;
+package org.nagorniy.utils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.nagorniy.model.Move;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import static org.junit.runners.Parameterized.*;
 
 
 @RunWith(Parameterized.class)
-public class MoveTest {
+public class CompareMoveTest {
 
     private Move basicMove;
     private Move moveToCompare;
@@ -34,7 +35,7 @@ public class MoveTest {
         });
     }
 
-    public MoveTest(Move basicMove, Move moveToCompare, int comparisonResult) {
+    public CompareMoveTest(Move basicMove, Move moveToCompare, int comparisonResult) {
         this.basicMove = basicMove;
         this.moveToCompare = moveToCompare;
         this.comparisonResult = comparisonResult;
@@ -42,6 +43,7 @@ public class MoveTest {
 
     @Test
     public void compareMoves() {
-        assertThat("Incorrect result of comparison", basicMove.compareMoves(moveToCompare), is(comparisonResult));
+        assertThat("Incorrect result of comparison",
+                GameResultDeterminer.compareMoves(basicMove, moveToCompare), is(comparisonResult));
     }
 }

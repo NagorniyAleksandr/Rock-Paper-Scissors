@@ -1,12 +1,16 @@
 package org.nagorniy.service;
 
+import org.nagorniy.model.GameResult;
+import org.nagorniy.model.GameRound;
 import org.nagorniy.model.Move;
-import org.nagorniy.player.ComputerPlayer;
 import org.nagorniy.player.Player;
 import org.nagorniy.player.UserPlayer;
+import org.nagorniy.strategy.*;
+import org.nagorniy.utils.GameResultDeterminer;
 import org.nagorniy.utils.GameStatisticUtils;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -34,20 +38,19 @@ public class RockPaperScissorsGame implements Game {
      */
     private static final String TERMINATE_GAME_SYMBOL = "Q";
     private static final String PLAY_AGAIN_MESSAGE_FORMAT = "Input any symbol to continue game, or '%s' to exit:\n";
+    private static final int MAX_LOSE_SEQUENCE_BEFORE_STRATEGY_CHANGE_THRESHOLD = 3;
 
     private Scanner scanner;
     private Player userPlayer;
-    private Player computerPlayer;
+    private ComputerStrategySelector computerStrategySelector;
 
-    private int userScore = 0;
-    private int computerScore = 0;
-    private int numberOfGames = 0;
+    private List<GameRound> gameHistory = new ArrayList<>();
 
 
-    public RockPaperScissorsGame(Scanner scanner, Random random) {
+    public RockPaperScissorsGame(Scanner scanner) {
         this.scanner = scanner;
         userPlayer = new UserPlayer(scanner);
-        computerPlayer = new ComputerPlayer(random);
+        initComputerStrategySelector();
     }
 
     /**
@@ -63,38 +66,29 @@ public class RockPaperScissorsGame implements Game {
         printInvitation();
 
         do {
-            Move computerMove = computerPlayer.makeMove();
+            Move computerMove = computerStrategySelector.makeMove(gameHistory);
+
             Move userMove = userPlayer.makeMove();
             out.printf(CHOSEN_SHAPE_MESSAGE_FORMAT, computerMove, userMove);
 
-            determineWinner(userMove, computerMove);
-            numberOfGames++;
+            GameResult gameResult = GameResultDeterminer.determine(userMove, computerMove);
+
+            switch (gameResult) {
+                case USER_WIN:
+                    out.printf(WIN_MESSAGE_FORMAT, userMove, computerMove);
+                    break;
+                case COMPUTER_WIN:
+                    out.printf(LOSE_MESSAGE_FORMAT, computerMove, userMove);
+                    break;
+                case DRAW:
+                    out.println(DRAW_MESSAGE);
+                    break;
+            }
+            gameHistory.add(new GameRound(userMove, computerMove, gameResult));
         } while (playAgain());
 
-        GameStatisticUtils.printGameStatistic(userScore, computerScore, numberOfGames);
+        GameStatisticUtils.printGameStatistic(gameHistory);
         printGoodbye();
-    }
-
-    /**
-     * Method to determine the winner of the game.
-     * This method compares two moves, prints appropriated console message
-     * and increments {@code userScore} or {@code computerScore} counters
-     *
-     * @param userMove     move of the user
-     * @param computerMove move of the computer
-     */
-    private void determineWinner(Move userMove, Move computerMove) {
-        int compareMoves = userMove.compareMoves(computerMove);
-
-        if (compareMoves > 0) {
-            out.printf(WIN_MESSAGE_FORMAT, userMove, computerMove);
-            userScore++;
-        } else if (compareMoves < 0) {
-            out.printf(LOSE_MESSAGE_FORMAT, computerMove, userMove);
-            computerScore++;
-        } else {
-            out.println(DRAW_MESSAGE);
-        }
     }
 
     /**
@@ -120,5 +114,16 @@ public class RockPaperScissorsGame implements Game {
     private static void printInvitation() {
         out.println(INVITATION_MESSAGE);
         out.println(GAME_RULES_MESSAGE);
+    }
+
+    /**
+     * Init method to setUp ComputerStrategies and ComputerStrategySelector
+     */
+    private void initComputerStrategySelector() {
+        computerStrategySelector = new ComputerStrategySelector(
+                MAX_LOSE_SEQUENCE_BEFORE_STRATEGY_CHANGE_THRESHOLD,
+                new PsychologicalComputerStrategy(),
+                new StatisticalComputerStrategy(),
+                new RandomComputerStrategy());
     }
 }
